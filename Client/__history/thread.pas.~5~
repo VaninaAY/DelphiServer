@@ -1,0 +1,98 @@
+﻿unit thread;
+
+interface
+
+uses
+  System.Classes;
+
+type
+  TMyThread = class(TThread)
+  private
+    { Private declarations }
+  protected
+    procedure Execute; override;
+    procedure Connect;
+    procedure SendData;
+  public
+    base640: string;
+    Data: string;
+  end;
+
+implementation
+uses uMain,  System.NetEncoding, System.Math, Winapi.Windows, Winapi.Messages, System.SysUtils,
+  System.Variants, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Samples.Spin,
+  System.Win.ScktComp, IdCoderMIME;
+
+
+
+procedure TMyThread.Connect;
+begin
+  frmMain.ClientSocket1.Host := '127.0.0.1';
+  frmMain.ClientSocket1.Port := 11111;
+  frmMain.ClientSocket1.Active := True;
+end;
+
+procedure TMyThread.Execute;
+var
+  DataLen: Integer;
+  Encoder: TBase64Encoding;
+
+  bytes: TBytes;
+  byte_str :  TBytes ;
+begin
+//while not Terminated do
+//  begin
+    DataLen := RandomRange(1, 3) ;
+    SetLength(Data, DataLen);
+    Data := '';
+    for var i := 0 to DataLen - 1 do
+      Data := Data + IntToStr(Random(10));
+    Encoder := TBase64Encoding.Create;
+    base640 := TNetEncoding.Base64.Encode(Data);
+    Synchronize(SendData);
+    Sleep(Random(1000) + 1000);
+    Application.ProcessMessages;
+
+//  end;
+end;
+
+
+
+
+procedure TMyThread.SendData;
+var
+  Encoder: TBase64Encoding;
+begin
+   frmMain.ClientSocket1.Socket.SendText(base640);
+   Encoder := TBase64Encoding.Create;
+   frmMain.edit2.Text := Encoder.Decode(base640);
+   frmMain.edit1.Text := Data;
+end;
+
+//procedure TMyThread.SendData;
+//var
+//  Data: string;
+//  DataLen: Integer;
+//  Encoder: TBase64Encoding;
+//  base640: string;
+//  bytes: TBytes;
+//  byte_str :  TBytes ;
+//begin
+//
+//  DataLen := RandomRange(1, 3) ;
+//  SetLength(Data, DataLen);
+//  Data := '';
+//  for var i := 0 to DataLen - 1 do
+//    Data := Data + IntToStr(Random(10));
+//
+//  frmMain.edit1.Text := Data;
+//  Encoder := TBase64Encoding.Create;
+//  base640 := TNetEncoding.Base64.Encode(Data);
+//  frmMain.ClientSocket1.Socket.SendText(base640);
+//  frmMain.edit2.Text := Encoder.Decode(base640);
+//  Sleep(Random(1000) + 1000);
+//  Application.ProcessMessages;
+//end;
+
+end.

@@ -1,0 +1,120 @@
+unit Server_f;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, System.Win.ScktComp, Vcl.StdCtrls, System.NetEncoding,
+  Data.DB, Data.Win.ADODB, Vcl.AppEvnts, FireDAC.Phys.SQLite,
+  FireDAC.Stan.Def, FireDAC.Comp.Client, FireDAC.Comp.UI, FireDAC.DApt, FireDAC.ConsoleUI.Wait,
+  FireDAC.Stan.Async;
+
+type
+  TServer = class(TForm)
+    Console: TListBox;
+    ServerSocket1: TServerSocket;
+    procedure ServerSocket1ClientConnect(Sender: TObject;
+      Socket: TCustomWinSocket);
+    procedure ServerSocket1ClientDisconnect(Sender: TObject;
+      Socket: TCustomWinSocket);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  type
+  TClientThread = class(TThread)
+  private
+    FClientSocket: TCustomWinSocket;
+  protected
+    procedure Execute; override;
+    procedure insert_data;
+  public
+    constructor Create(ClientSocket: TCustomWinSocket);
+  end;
+
+var
+  Server: TServer;
+  Connection: TFDConnection;
+  Query: TFDQuery;
+
+implementation
+
+{$R *.dfm}
+
+procedure TServer.FormCreate(Sender: TObject);
+begin
+  FDManager.SilentMode := True;
+  ServerSocket1.Port := 11111;
+  ServerSocket1.Active := True;
+  Console.Items.Add('Server Start');
+  Connection := TFDConnection.Create(nil);
+  Connection.DriverName := 'SQLite';
+  Connection.Params.Values['Database'] := 'C:\Users\vanin\Documents\институт\delphi\Server_final\data.sqlite';
+  Connection.Connected := True;
+  Query := TFDQuery.Create(nil);
+  Query.Connection := Connection;
+end;
+
+procedure TServer.FormDestroy(Sender: TObject);
+begin
+  ServerSocket1.Active := False;
+  Connection.Connected := False;
+end;
+
+procedure TServer.ServerSocket1ClientConnect(Sender: TObject;
+  Socket: TCustomWinSocket);
+begin
+  Console.Items.Add('Клиент подключился');
+  TClientThread.Create(Socket);
+end;
+
+procedure TServer.ServerSocket1ClientDisconnect(Sender: TObject;
+  Socket: TCustomWinSocket);
+begin
+  Console.Items.Add('Клиент отключился');
+end;
+
+{ TClientThread }
+
+constructor TClientThread.Create(ClientSocket: TCustomWinSocket);
+begin
+  inherited Create(False);
+  FClientSocket := ClientSocket;
+end;
+
+procedure TClientThread.Execute;
+begin
+  try
+    while not Terminated do
+      insert_data
+  finally
+    FClientSocket.Free;
+    Self.Terminate;
+  end;
+
+
+end;
+
+procedure TClientThread.insert_data;
+var
+  data, received_str: string;
+  Encoder: TBase64Encoding;
+begin
+    received_str := UTF8Encode(FClientSocket.ReceiveText);
+  if received_str	<> '' then
+  begin
+    Encoder := TBase64Encoding.Create;
+    data := Encoder.Decode(received_str);
+    Server.Console.Items.Add('Данные пришли: ' + data);
+    Query.SQL.Text := 'INSERT INTO table_data (ID, data) VALUES (:Value1, :Value2)';
+    Query.ParamByName('Value1').AsInteger	 := FClientSocket.Handle;
+    Query.ParamByName('Value2').AsString  := data;
+    Query.ExecSQL;
+   end;
+end;
+
+end.

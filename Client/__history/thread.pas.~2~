@@ -1,0 +1,56 @@
+unit thread;
+
+interface
+
+uses
+  System.Classes;
+
+type
+  TMyThread = class(TThread)
+  private
+    { Private declarations }
+  protected
+    procedure Execute; override;
+    procedure SendData;
+  public
+  end;
+
+implementation
+uses uMain,  System.NetEncoding, System.SysUtils, System.Math;
+
+
+
+procedure TMyThread.Execute;
+begin
+while not Terminated do
+  begin
+    Synchronize(SendData);
+  end;
+end;
+
+procedure TMyThread.SendData;
+var
+  Data: string;
+  DataLen: Integer;
+  Encoder: TBase64Encoding;
+  base640: string;
+  bytes: TBytes;
+  byte_str :  TBytes ;
+begin
+
+  DataLen := RandomRange(5, 10) ;
+  SetLength(Data, DataLen);
+
+  Data := '';
+  for var i := 0 to DataLen - 1 do
+    Data := Data + IntToStr(Random(10));
+
+  frmMain.edit1.Text := Data;
+  Encoder := TBase64Encoding.Create;
+  base640 := TNetEncoding.Base64.Encode(Data);
+  frmMain.ClientSocket1.Socket.SendText(base640);
+  frmMain.edit2.Text := Encoder.Decode(base640);
+  Sleep(Random(1000) + 1000);
+end;
+
+end.

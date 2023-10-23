@@ -1,0 +1,71 @@
+unit uMain;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Samples.Spin,
+  System.Win.ScktComp, System.Math, System.NetEncoding, IdCoderMIME, thread;
+
+type
+  TfrmMain = class(TForm)
+    edtMsg: TEdit;
+    edtCountFlows: TSpinEdit;
+    btnStart: TButton;
+    btnStop: TButton;
+    edtHost: TEdit;
+    edtPort: TEdit;
+    btnSend: TButton;
+    ClientSocket1: TClientSocket;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Label1: TLabel;
+    btnStopSend: TButton;
+    procedure btnStartClick(Sender: TObject);
+    procedure btnStopClick(Sender: TObject);
+    procedure btnSendClick(Sender: TObject);
+    procedure btnStopSendClick(Sender: TObject);
+  private
+    MyT : TMyThread;
+  public
+    { Public declarations }
+  end;
+
+var
+  frmMain: TfrmMain;
+
+implementation
+
+{$R *.dfm}
+
+
+
+procedure TfrmMain.btnStartClick(Sender: TObject);
+begin
+  ClientSocket1.Host := '127.0.0.1';
+  ClientSocket1.Port := 11111;
+  ClientSocket1.Active := True;
+end;
+
+procedure TfrmMain.btnStopClick(Sender: TObject);
+begin
+  ClientSocket1.Active := False;
+  edtCountFlows.ReadOnly := True;
+end;
+
+
+procedure TfrmMain.btnStopSendClick(Sender: TObject);
+begin
+   MyT.Terminate;
+end;
+
+procedure TfrmMain.btnSendClick(Sender: TObject);
+
+begin
+  MyT := TMyThread.Create(true);
+  MyT.Priority := tpNormal;
+  MyT.FreeOnTerminate :=  True;
+  MyT.Resume;
+end;
+
+end.

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.906,C:\Users\vanin\Documents\институт\delphi youtube\Client\thread.pas=C:\Users\vanin\Documents\институт\delphi youtube\Client\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.961,=C:\Users\vanin\Documents\институт\delphi youtube\Client\Unit2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.127,=C:\Program Files (x86)\Embarcadero\Studio\22.0\source\rtl\win\Winapi.Winsock2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.393,C:\Users\vanin\Documents\институт\delphi youtube\Client\uMain.dfm=C:\Users\vanin\OneDrive\Документы\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.645,=C:\Users\vanin\OneDrive\Документы\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.393,C:\Users\vanin\Documents\институт\delphi youtube\Client\uMain.pas=C:\Users\vanin\OneDrive\Документы\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.799,C:\Users\vanin\Documents\институт\delphi youtube\Client\Client.dproj=C:\Users\vanin\Documents\институт\Delfi test\Client\Client.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.431,C:\Users\vanin\Documents\институт\delphi youtube\Client\Client.dproj=C:\Users\vanin\Documents\институт\Delfi test\Client\Client.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.056,=C:\Users\vanin\Documents\институт\delphi youtube\Client\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.251,C:\Users\vanin\Documents\институт\Delfi test\Client\Client.dproj=C:\Users\vanin\Documents\институт\delphi youtube\Client\Client.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.306,C:\Users\vanin\Documents\институт\Delfi test\Client\Client.dproj=C:\Users\vanin\Documents\институт\delphi youtube\Client\Client.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.329,C:\Users\vanin\Documents\институт\delphi youtube\Client\Client.dproj=C:\Users\vanin\OneDrive\Документы\Embarcadero\Studio\Projects\Project2.dproj</Transaction>
+  </Transactions>
+</BorlandProject>
